@@ -1,35 +1,33 @@
-name: Build & Upload EsPo APK
+name: Build Flutter APK
 
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:  # Allows manual trigger
+      - main  # Change to your branch if needed
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.x'  # Use latest Flutter version
+          flutter-version: '3.x'  # Change this to your Flutter version
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: flutter pub get
+        working-directory: ./your_project_directory # Change to your actual Flutter project path
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk
+        working-directory: ./your_project_directory # Change this to your actual project directory
 
-      - name: Upload APK as Artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
         with:
-          name: EsPo-release.apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: app-release
+          path: your_project_directory/build/app/outputs/flutter-apk/app-release.apk # Adjust path if needed
