@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
-        working-directory: ./your_project_directory # Change to your actual Flutter project path
+        working-directory: ./  # Use correct project directory
 
       - name: Build APK
         run: flutter build apk
