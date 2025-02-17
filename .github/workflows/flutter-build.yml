@@ -20,11 +20,11 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
-        working-directory: ./  # Use correct project directory
+        working-directory: ./app  # Change 'app' to your actual project folder
 
       - name: Build APK
         run: flutter build apk
-        working-directory: ./your_project_directory # Change this to your actual project directory
+        working-directory: ./app  # Change 'app' to your actual project folder
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
