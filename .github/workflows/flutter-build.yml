@@ -1,9 +1,9 @@
-name: Build Flutter APK
+name: Flutter Build
 
 on:
   push:
     branches:
-      - main  # Change to your branch if needed
+      - main
 
 jobs:
   build:
@@ -16,21 +16,28 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.x'  # Change this to your Flutter version
+          flutter-version: '3.10.6'  # Replace with your Flutter version
+
+      - name: Run Flutter Doctor
+        run: flutter doctor
+
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+            ${{ runner.os }}-
 
       - name: Install dependencies
         run: flutter pub get
-        working-directory: ./your_project_directory  # Replace with the actual directory
 
       - name: Build APK
         run: flutter build apk
-        working-directory: ./app  # Change 'app' to your actual project folder
-        
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: your_project_directory/build/app/outputs/flutter-apk/app-release.apk # Adjust path if needed
-
-      - name: Debug Directory
-        run: ls -la
+          path: build/app/outputs/flutter-apk/app-release.apk
