@@ -1,13 +1,9 @@
-name: Build Flutter APK
+name: Flutter Build
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
 
 jobs:
   build:
@@ -15,21 +11,42 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.0' # Update to latest version
+          flutter-version: '3.10.6'  # Update to your Flutter version
+
+      - name: Run Flutter Doctor
+        run: flutter doctor
+
+      - name: Debug Directory
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Files in the directory:"
+          ls -la
+
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+            ${{ runner.os }}-
 
       - name: Install dependencies
         run: flutter pub get
+        working-directory: ./  # Change this if your Flutter project is in a subfolder
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk
+        working-directory: ./  # Change this if needed
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: release-apk
+          name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
