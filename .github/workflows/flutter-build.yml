@@ -1,10 +1,9 @@
-
 name: Flutter Build
 
 on:
   push:
     branches:
-      - main  # Runs on push to the main branch
+      - main
 
 jobs:
   build:
@@ -17,16 +16,23 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.6'  # Replace with your actual Flutter version
+          flutter-version: '3.10.6'  # Replace with your Flutter version
 
       - name: Run Flutter Doctor
         run: flutter doctor
 
-      - name: Ensure Correct Directory
+      - name: Debug - Show Directory Structure
         run: |
-          echo "Current directory:"
+          echo "Checking current directory:"
           pwd
           ls -la
+
+      - name: Ensure Project Root
+        run: |
+          if [ ! -f "pubspec.yaml" ]; then
+            echo "❌ Error: pubspec.yaml not found in $(pwd)"
+            exit 1
+          fi
 
       - name: Cache Flutter Dependencies
         uses: actions/cache@v3
@@ -39,14 +45,9 @@ jobs:
 
       - name: Install Dependencies
         run: flutter pub get
-        working-directory: .  # Ensure this points to your project root
-
-      - name: Verify Project Structure
-        run: ls -la
 
       - name: Build APK
         run: flutter build apk
-        working-directory: .  # Ensure this points to your project root
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
