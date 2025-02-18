@@ -1,32 +1,34 @@
+
 name: Flutter Build
 
 on:
   push:
     branches:
-      - main
+      - main  # Runs on push to the main branch
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
-        with:
-          submodules: true  # Ensures all submodules are fetched
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.6'  # Replace with your Flutter version
-      
-      - name: Debug Directory
-        run: pwd && ls -la
-   
+          flutter-version: '3.10.6'  # Replace with your actual Flutter version
+
       - name: Run Flutter Doctor
         run: flutter doctor
 
-      - name: Cache Flutter dependencies
+      - name: Ensure Correct Directory
+        run: |
+          echo "Current directory:"
+          pwd
+          ls -la
+
+      - name: Cache Flutter Dependencies
         uses: actions/cache@v3
         with:
           path: ~/.pub-cache
@@ -35,25 +37,19 @@ jobs:
             ${{ runner.os }}-pub-
             ${{ runner.os }}-
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: flutter pub get
-        working-directory: ./app  # Update to match your actual directory
+        working-directory: .  # Ensure this points to your project root
 
-      - name: Debug Directory
+      - name: Verify Project Structure
         run: ls -la
-      
+
       - name: Build APK
         run: flutter build apk
-        working-directory: ./your_project_directory
-    
+        working-directory: .  # Ensure this points to your project root
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: build/app/outputs/flutter-apk/app-releas
-
-      - name: Clean Flutter Cache
-        run: flutter pub cache repair
-
-      - name: Clean Flutter Project
-        run: flutter clean
+          path: build/app/outputs/flutter-apk/app-release.apk
