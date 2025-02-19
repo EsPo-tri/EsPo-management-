@@ -22,18 +22,15 @@ jobs:
         run: flutter doctor
 
       - name: Debug - Show Directory Structure
+        run: ls  -R     
+         
+      - name: Ensure Project Roo
         run: |
-          echo "Checking current directory:"
-          pwd
-          ls -la
-
-      - name: Ensure Project Root
-        run: |
-          cd my_flutter_app  # Change this to the actual Flutter project folder    
-          if [ ! -f "pubspec.yaml" ]; then
-          echo "❌ Error: pubspec.yaml not found in $(pwd)"
-          exit 1
-          fi
+           ls -la  # Debugging: List files in the current directory
+           if [ ! -f "pubspec.yaml" ]; then
+           echo "Error: pubspec.yaml not found in $(pwd)"
+           exit 1
+           fi
 
       - name: Cache Flutter Dependencies
         uses: actions/cache@v3
