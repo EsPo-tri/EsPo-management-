@@ -29,9 +29,10 @@ jobs:
 
       - name: Ensure Project Root
         run: |
+          cd my_flutter_app  # Change this to the actual Flutter project folder    
           if [ ! -f "pubspec.yaml" ]; then
-            echo "❌ Error: pubspec.yaml not found in $(pwd)"
-            exit 1
+          echo "❌ Error: pubspec.yaml not found in $(pwd)"
+          exit 1
           fi
 
       - name: Cache Flutter Dependencies
@@ -44,10 +45,10 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install Dependencies
-        run: flutter pub get
+        run: cd my_flutter_app && flutter pub get
 
       - name: Build APK
-        run: flutter build apk
+        run: cd my_flutter_app && flutter build apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
