@@ -4,10 +4,16 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EsPo-management # Change this to the correct subdirectory if needed
 
     steps:
       - name: Checkout Repository
@@ -16,39 +22,37 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.6'  # Replace with your Flutter version
+          flutter-version: 3.x  # Change to your required Flutter version
 
       - name: Run Flutter Doctor
         run: flutter doctor
 
       - name: Debug - Show Directory Structure
-        run: ls  -R     
-         
-      - name: Ensure Project Roo
+        run: ls -R
+
+      - name: Ensure Project Root
         run: |
-           ls -la  # Debugging: List files in the current directory
-           if [ ! -f "pubspec.yaml" ]; then
-           echo "Error: pubspec.yaml not found in $(pwd)"
-           exit 1
-           fi
+          if [ ! -f "pubspec.yaml" ]; then
+            echo "Error: pubspec.yaml not found. Check your project structure."
+            exit 1
+          fi
+
+      - name: Install Dependencies
+        run: flutter pub get
 
       - name: Cache Flutter Dependencies
         uses: actions/cache@v3
         with:
           path: ~/.pub-cache
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pub-
-            ${{ runner.os }}-
-
-      - name: Install Dependencies
-        run: cd my_flutter_app && flutter pub get
+            ${{ runner.os }}-flutter-
 
       - name: Build APK
-        run: cd my_flutter_app && flutter build apk
+        run: flutter build apk --release
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: app-release
+          name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
