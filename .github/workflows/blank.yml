@@ -38,8 +38,9 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: flutter pub get
-        working-directory: ./  # Change this if your Flutter project is in a subfolder
+        run: |
+         cd your_flutter_project_folder  # Change this to the correct folder
+         flutter pub get
 
       - name: Build APK
         run: flutter build apk
