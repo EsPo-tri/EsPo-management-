@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.yourapp">
+    package="com.espo">
 
     <application
         android:name=".MainApplication"
-        android:label="your_app"
+        android:label="EsPo"
         android:icon="@mipmap/ic_launcher">
-        
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -16,12 +16,14 @@
             <meta-data
                 android:name="flutterEmbedding"
                 android:value="2" />
-            
+                
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
+
     </application>
 
 </manifest>
