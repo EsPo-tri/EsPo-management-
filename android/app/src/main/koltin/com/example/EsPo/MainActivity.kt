@@ -1,4 +1,5 @@
-package com.espo  // Update this to your actual package name
+
+package com.espo
 
 import io.flutter.embedding.android.FlutterActivity
 
