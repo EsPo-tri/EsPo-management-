@@ -1,0 +1,7 @@
+android {
+    compileSdkVersion 33  // Use latest version
+    defaultConfig {
+        minSdkVersion 21  // Update if lower
+        targetSdkVersion 33
+    }
+}
